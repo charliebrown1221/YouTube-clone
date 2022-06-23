@@ -1,0 +1,8 @@
+from dataclasses import fields
+from rest_framework import serializers
+from .models import Reply
+
+class ReplySerializer(serializers.ModelSerializer):
+    class Meta:
+        fields=['user','comment','text']
+        depth=1
