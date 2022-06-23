@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models;
 from comment.models import Comment
 # Create your models here.
 class Reply(models.Model):
