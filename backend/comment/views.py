@@ -9,24 +9,33 @@ from .serializers import CommentSerializer
 # Create your views here.
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_all_comments(request, pk):
+def get_all_comments(request, video_id):
     if  request.method == 'GET':
-       comment = Comment.objects.filter(video_id=pk)
-    serializer = CommentSerializer(comment,many=True)
+       comments = Comment.objects.filter(video_id=video_id)
+    serializer = CommentSerializer(comments,many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view([ 'POST','PUT'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def user_comment(request):
+def add_comment(request):
     print(
         'User ', f"{request.user.id} {request.user.email} {request.user.username}")
     if request.method == 'POST':
-         serializer = CommentSerializer(data=request.data)
-         if serializer.is_valid():
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
             serializer.save(user=request.user)
-         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    elif request.method == 'PUT':
-        serializer= CommentSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(user=request.user)
-        return Response (serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+   
+@api_view([ 'PUT'])
+@permission_classes([IsAuthenticated])
+def update_comment(request, pk):
+    print(
+        'User ', f"{request.user.id} {request.user.email} {request.user.username}")
+    comment=get_object_or_404(Comment,pk=pk,)
+    if request.method == 'PUT':
+         serializer= CommentSerializer(comment,data=request.data)
+         if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)     
