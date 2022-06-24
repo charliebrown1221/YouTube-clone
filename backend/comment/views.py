@@ -11,7 +11,7 @@ from .serializers import CommentSerializer
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_all_comments(request, pk):
-    videoId=get_object_or_404(pk=video_id )
+    videoId=get_object_or_404(video_id=pk )
     if  request.method == 'GET':
        comment = Comment.object.all()
     serializer = CommentSerializer(comment,videoId, many=True)
