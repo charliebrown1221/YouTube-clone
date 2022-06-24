@@ -15,10 +15,10 @@ def reply_by_id(request, comment):
    if  request.method == 'GET':
       reply = Reply.objects.filter(comment=comment)
       serializer = ReplySerializer(reply, many=True)
-      # print (reply)
       return Response(serializer.data, status=status.HTTP_200_OK)
-   # elif request.method == 'POST':
-   #      serializer = ReplySerializer(comment=comment,data=request.data)
-   #      serializer.is_valid(raise_exception=True)
-   #      serializer.save(user=request.user)
-   #      return Response(serializer.data, status=status.HTTP_201_CREATED)
+   elif request.method == 'POST':
+      reply=get_object_or_404(Reply,comment=comment)
+      serializer = ReplySerializer(reply,data=request.data)
+      serializer.is_valid(raise_exception=True)
+      serializer.save(user=request.user)
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
