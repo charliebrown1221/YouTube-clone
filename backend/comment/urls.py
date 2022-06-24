@@ -3,5 +3,5 @@ from . import views
 
 
 urlpatterns =[
-    path ('',views.get_all_comments)
+    path ('<slug:pk>/',views.get_all_comments)
 ]
