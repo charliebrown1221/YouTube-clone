@@ -19,7 +19,7 @@ const SearchPage = (props) => {
         let response = await axios.get(`https://www.googleapis.com/youtube/v3/search?q=${searchTerm}&key=AIzaSyBxIKxXVF3XT_WlqGfZSmlyBKhRkRmG_xE&type=video&part=snippet`)
         console.log(response.data)
         setSearchResults(response.data.items)
-        setVideoId(response.data.items[1].id.videoId)
+        setVideoId(response.data.items[0].id.videoId)
       } catch (error) {
         console.log(error.response.data)
         
@@ -28,9 +28,9 @@ const SearchPage = (props) => {
   useEffect(() => {
     const getComments = async () => {
         try {
-          let response = await axios.get("http://127.0.0.1:8000/api/comments/1/", );
+          let response = await axios.get(`http://127.0.0.1:8000/api/comments/1/` );
           setComments(response.data);
-        console.log(response.data)
+        console.log('comment:',response.data)
         } catch (error) {
           console.log(error.response.data);
         }};
