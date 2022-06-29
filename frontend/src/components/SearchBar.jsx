@@ -7,7 +7,7 @@ const SearchBar = (props) => {
    
    function handelSearch(event){
     event.preventDefault();
-    saveSearch(props.searchResults)
+    props.runSearch(saveSearch)
    }
    
    

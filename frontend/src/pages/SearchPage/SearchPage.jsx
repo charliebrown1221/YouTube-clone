@@ -2,6 +2,7 @@ import React,{useEffect,useState} from "react";
 import axios from "axios";
 import CommentMapper from "../../components/Comment/CommentMapper";
 import SearchBar from "../../components/SearchBar";
+import VideoPlayer from "../../components/VideoPlayer";
 
 
 
@@ -10,7 +11,7 @@ const SearchPage = (props) => {
     const [comments, setComments] = useState([]);
     const [searchResults, setSearchResults ]=useState([])
     // const [videoId, setVideoId]=useState('')
-
+   
   useEffect(() => {
     const getComments = async () => {
         try {
@@ -23,18 +24,18 @@ const SearchPage = (props) => {
       getComments();
     }, []);
     
-    useEffect(() => {
-      const runSearch =async ()=>{
+    
+      async function runSearch(searchTerm) {
       try {
-        let response = await axios.get(`https://www.googleapis.com/youtube/v3/search?q=${searchResults}&key=AIzaSyBxIKxXVF3XT_WlqGfZSmlyBKhRkRmG_xE&type=video&part=snippet`)
+        let response = await axios.get(`https://www.googleapis.com/youtube/v3/search?q=${searchTerm}&key=AIzaSyBxIKxXVF3XT_WlqGfZSmlyBKhRkRmG_xE&type=video&part=snippet`)
         console.log(response.data)
         setSearchResults(response.data.items)
       } catch (error) {
         console.log(error.response.data)
+        
       }
     };
-    runSearch();
-  },[]);
+  
 
 
      
@@ -45,8 +46,8 @@ const SearchPage = (props) => {
       <div>
         
         <div>
-          <SearchBar setSearchResults={setSearchResults} searchResults={searchResults}/>
-          
+          <SearchBar runSearch={runSearch} />
+          <VideoPlayer searchResults={searchResults} />
         </div>
       
         <div>
