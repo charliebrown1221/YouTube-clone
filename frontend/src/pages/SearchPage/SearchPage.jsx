@@ -10,8 +10,21 @@ const SearchPage = (props) => {
     // const [user, token] = useAuth();
     const [comments, setComments] = useState([]);
     const [searchResults, setSearchResults ]=useState([])
-    // const [videoId, setVideoId]=useState('')
-   
+    const [videoId, setVideoId]=useState('')
+
+
+
+    async function runSearch(searchTerm) {
+      try {
+        let response = await axios.get(`https://www.googleapis.com/youtube/v3/search?q=${searchTerm}&key=AIzaSyBxIKxXVF3XT_WlqGfZSmlyBKhRkRmG_xE&type=video&part=snippet`)
+        console.log(response.data)
+        setSearchResults(response.data.items)
+        setVideoId(response.data.items[1].id.videoId)
+      } catch (error) {
+        console.log(error.response.data)
+        
+      }
+    };
   useEffect(() => {
     const getComments = async () => {
         try {
@@ -22,19 +35,12 @@ const SearchPage = (props) => {
           console.log(error.response.data);
         }};
       getComments();
+    
+      runSearch("cats")
     }, []);
     
     
-      async function runSearch(searchTerm) {
-      try {
-        let response = await axios.get(`https://www.googleapis.com/youtube/v3/search?q=${searchTerm}&key=AIzaSyBxIKxXVF3XT_WlqGfZSmlyBKhRkRmG_xE&type=video&part=snippet`)
-        console.log(response.data)
-        setSearchResults(response.data.items)
-      } catch (error) {
-        console.log(error.response.data)
-        
-      }
-    };
+  
   
 
 
@@ -47,9 +53,8 @@ const SearchPage = (props) => {
         
         <div>
           <SearchBar runSearch={runSearch} />
-          <VideoPlayer searchResults={searchResults} />
         </div>
-      
+        <div><VideoPlayer videoId={videoId} searchResults={searchResults} /></div>
         <div>
           <CommentMapper comment={comments}/>
         </div>
