@@ -8,6 +8,7 @@ const SearchBar = (props) => {
    function handelSearch(event){
     event.preventDefault();
     props.runSearch(saveSearch)
+    // props.relatedVideoIds(saveSearch) 
    }
    
    
